@@ -13,6 +13,8 @@ public class Game1 : Game
     private Texture2D _pixel;
     private List<Asteroid> _asteroids;
 
+    private Ship _ship;
+
     public Game1()
     {
         _graphics = new GraphicsDeviceManager(this);
@@ -37,6 +39,7 @@ public class Game1 : Game
         for (int i = 0; i < 3; i++) {
             _asteroids.Add( new Asteroid(_pixel, new Vector2(150 + (225 * i), 250) ) );
         }
+        _ship = new Ship( _pixel, new Vector2( 400, 300 ) );
     }
 
     protected override void Update(GameTime gameTime)
@@ -45,8 +48,10 @@ public class Game1 : Game
             Exit();
 
         foreach( Asteroid asteroid in _asteroids ) {
-            asteroid.Update(gameTime);
+            asteroid.Update(gameTime, GraphicsDevice);
         }
+
+        _ship.Update(gameTime, GraphicsDevice);
 
         base.Update(gameTime);
     }
@@ -58,8 +63,10 @@ public class Game1 : Game
         _spriteBatch.Begin();
 
         foreach( Asteroid asteroid in _asteroids ) {
-            asteroid.Draw(_spriteBatch);
+            // asteroid.Draw(_spriteBatch);
         }
+
+        _ship.Draw(_spriteBatch);
 
         _spriteBatch.End();
 
