@@ -6,7 +6,7 @@ using Microsoft.Xna.Framework.Input;
 
 namespace Asteroids;
 
-public class Ship
+public class Ship : GameObject
 {
     
     private static readonly Random _rand = new Random();
@@ -14,24 +14,12 @@ public class Ship
     private static int MAX_RADIUS = 70;
     private KeyboardState _prevKeyboardState;
 
-    private Texture2D _texture;
-    private float _rotation, _rotationAngle;
-    private Vector2 _velocity, _position;
-    private int _edges;
-    private float _scale;
-    private float maxLength;
-
-    private List<Vector2> _offsetVertices;
-    private List<Vector2> _vertices;
-
-    private Vector2 debug_init_position;
 
     public Ship( Texture2D texture ) : this(texture, new(200, 200)) { }
 
-    public Ship( Texture2D texture, Vector2 position ) {
+    public Ship( Texture2D texture, Vector2 position ) : base(texture, new(200, 200))
+    {
 
-        _texture = texture;
-        _position = position;
         debug_init_position = position;
         Init();
 
@@ -47,8 +35,8 @@ public class Ship
             (float) (-3f + _rand.NextDouble() * (6f))
         );
         _edges = 4;
-        _scale = (float) (0.5f + _rand.NextDouble() * (1.5f - 0.5f));
-        GenerateVertices();        
+        _scale = 2f;
+        GenerateVertices();
         UpdateDrawVertices();
 
     }
@@ -106,7 +94,7 @@ public class Ship
         }
     }
 
-    public void Update(GameTime gameTime, GraphicsDevice graphicsDevice)
+    public override void Update(GameTime gameTime, GraphicsDevice graphicsDevice)
     {
 
         // Update position based on velocity
@@ -136,40 +124,6 @@ public class Ship
             _rotationAngle -= _rotation * (float) gameTime.ElapsedGameTime.TotalSeconds;
         }
 
-    }
-
-    public void Draw(SpriteBatch _spriteBatch) {
-
-        Vector2 first = _vertices[0];
-        Vector2 last = first;
-        foreach( Vector2 vertex in _vertices )
-        {
-            DrawLine(_spriteBatch, _position, vertex, Color.Red, 1f);
-            DrawLine(_spriteBatch, last, vertex, Color.White, 1f);
-            last = vertex;
-
-        }
-
-        DrawLine(_spriteBatch, _vertices[^1], first, Color.White, 1f);
-
-    }
-
-    // Helper function to draw a line between 2 points
-    private void DrawLine(SpriteBatch _spriteBatch, Vector2 start, Vector2 end, Color color, float thickness = 1f)
-    {
-        Vector2 edge = end - start;
-        float angle = (float)Math.Atan2(edge.Y, edge.X);
-        float length = edge.Length();
-
-        _spriteBatch.Draw(_texture,
-            new Rectangle((int)start.X, (int)start.Y, (int)length, (int)thickness),
-            null,
-            color,
-            angle,
-            new Vector2(0, thickness / 2),
-            SpriteEffects.None,
-            0
-        );
     }
 
 }

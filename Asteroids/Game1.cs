@@ -11,9 +11,12 @@ public class Game1 : Game
     private GraphicsDeviceManager _graphics;
     private SpriteBatch _spriteBatch;
     private Texture2D _pixel;
+
     private List<Asteroid> _asteroids;
 
     private Ship _ship;
+
+    private List<GameObject> _drawable;
 
     public Game1()
     {
@@ -25,7 +28,7 @@ public class Game1 : Game
     protected override void Initialize()
     {
 
-        _asteroids = new List<Asteroid>();
+        _drawable = new List<GameObject>();
 
         base.Initialize();
     }
@@ -37,9 +40,9 @@ public class Game1 : Game
         _pixel = new Texture2D(GraphicsDevice, 1, 1);
         _pixel.SetData(new[] { Color.White });
         for (int i = 0; i < 3; i++) {
-            _asteroids.Add( new Asteroid(_pixel, new Vector2(150 + (225 * i), 250) ) );
+            _drawable.Add( new Asteroid(_pixel, new Vector2(150 + (225 * i), 250) ) );
         }
-        _ship = new Ship( _pixel, new Vector2( 400, 300 ) );
+        _drawable.Add( new Ship( _pixel, new Vector2(400, 300) ) );
     }
 
     protected override void Update(GameTime gameTime)
@@ -47,11 +50,9 @@ public class Game1 : Game
         if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
             Exit();
 
-        foreach( Asteroid asteroid in _asteroids ) {
-            asteroid.Update(gameTime, GraphicsDevice);
+        foreach( GameObject item in _drawable) {
+            item.Update(gameTime, GraphicsDevice);
         }
-
-        _ship.Update(gameTime, GraphicsDevice);
 
         base.Update(gameTime);
     }
@@ -62,11 +63,10 @@ public class Game1 : Game
 
         _spriteBatch.Begin();
 
-        foreach( Asteroid asteroid in _asteroids ) {
-            // asteroid.Draw(_spriteBatch);
+        foreach (GameObject item in _drawable)
+        {
+            item.Draw(_spriteBatch);
         }
-
-        _ship.Draw(_spriteBatch);
 
         _spriteBatch.End();
 
