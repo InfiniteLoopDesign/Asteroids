@@ -35,7 +35,8 @@ public class Ship : GameObject
             (float) (-3f + _rand.NextDouble() * (6f))
         );
         _edges = 4;
-        _scale = 2f;
+        _scale = 0.5f;
+        _thickness = 1f;
         GenerateVertices();
         UpdateDrawVertices();
 
@@ -77,6 +78,15 @@ public class Ship : GameObject
             _offsetVertices.Add(new Vector2(x, y));
         }
 
+    }
+
+    // Hardpoint describes the position on the screen where a projectile fires
+    // from, absolute space based on ship's position and angle
+    public Vector2 GetHardpoint() {
+        return _vertices[0];
+    }
+    public float GetRotationAngle() {
+        return _rotationAngle;
     }
 
     private void UpdateDrawVertices() {

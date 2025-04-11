@@ -37,6 +37,7 @@ public class Asteroid : GameObject
         );
         _edges = _rand.Next(7, 13);
         _scale = (float) (0.5f + _rand.NextDouble() * (1.5f - 0.5f));
+        _thickness = 2f;
         GenerateVertices();        
         UpdateDrawVertices();
 

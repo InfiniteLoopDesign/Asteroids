@@ -16,6 +16,9 @@ public class Game1 : Game
 
     private Ship _ship;
 
+    private Projectile _missle;
+    private KeyboardState _prevKeyboardState;
+
     private List<GameObject> _drawable;
 
     public Game1()
@@ -42,7 +45,10 @@ public class Game1 : Game
         for (int i = 0; i < 3; i++) {
             _drawable.Add( new Asteroid(_pixel, new Vector2(150 + (225 * i), 250) ) );
         }
-        _drawable.Add( new Ship( _pixel, new Vector2(400, 300) ) );
+        _ship = new Ship( _pixel, new Vector2(400, 300) );
+        _drawable.Add( _ship );
+
+        _missle = new Projectile( _pixel, new Vector2(-10, -10), 0f );
     }
 
     protected override void Update(GameTime gameTime)
@@ -53,6 +59,15 @@ public class Game1 : Game
         foreach( GameObject item in _drawable) {
             item.Update(gameTime, GraphicsDevice);
         }
+        _missle.Update(gameTime, GraphicsDevice);
+
+        // Reset Function for testing purposes, re-initialize the Asteroid
+        KeyboardState keyboardState = Keyboard.GetState();
+        if (keyboardState.IsKeyDown(Keys.Space) && _prevKeyboardState.IsKeyUp(Keys.Space))
+        {
+            _missle = new Projectile( _pixel, _ship.GetHardpoint(), _ship.GetRotationAngle() );
+        }
+        _prevKeyboardState = keyboardState;
 
         base.Update(gameTime);
     }
@@ -67,6 +82,7 @@ public class Game1 : Game
         {
             item.Draw(_spriteBatch);
         }
+        _missle.Draw(_spriteBatch);
 
         _spriteBatch.End();
 

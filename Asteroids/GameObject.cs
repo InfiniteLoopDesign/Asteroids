@@ -10,6 +10,7 @@ namespace Asteroids
     {
 
         protected Texture2D _texture;
+        protected float _thickness;
         protected float _rotation, _rotationAngle;
         protected Vector2 _velocity, _position;
         protected int _edges;
@@ -27,6 +28,7 @@ namespace Asteroids
         {
             _texture = texture;
             _position = position;
+            debug_init_position = position;
         }
 
 
@@ -41,13 +43,13 @@ namespace Asteroids
             Vector2 last = first;
             foreach (Vector2 vertex in _vertices)
             {
-                DrawLine(_spriteBatch, _position, vertex, Color.Red, 1f);
-                DrawLine(_spriteBatch, last, vertex, Color.White, 2f);
+                // DrawLine(_spriteBatch, _position, vertex, Color.Red, 1f);
+                DrawLine(_spriteBatch, last, vertex, Color.White, _thickness);
                 last = vertex;
 
             }
 
-            DrawLine(_spriteBatch, _vertices[^1], first, Color.White, 2f);
+            DrawLine(_spriteBatch, _vertices[^1], first, Color.White, _thickness);
 
         }
 
